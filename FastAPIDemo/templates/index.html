@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+    <link rel="stylesheet" type="text/css" href="/static/calc_styles.css">
+</head>
+<body>
+    <h1>Calculator</h1>
+    <input id="num1" type="number" placeholder="Enter first number">
+    <input id="num2" type="number" placeholder="Enter second number">
+    <button id="add">Add</button>
+    <button id="subtract">Subtract</button>
+    <button id="multiply">Multiply</button>
+    <button id="divide">Divide</button>
+    <div class="result-container">
+        <h2>Result: <span id="result"></span></h2>
+    </div>
+
+    <script>
+        function calculate(operation) {
+            var num1 = document.getElementById('num1').value;
+            var num2 = document.getElementById('num2').value;
+
+            if (operation === 'divide' && num2 == 0) {
+                alert('Error: Division by zero is not allowed.');
+                return;
+            }
+
+            fetch('/' + operation, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ "num1": num1, "num2": num2 }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    document.getElementById('result').textContent = data.result;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        }
+
+        document.getElementById('add').addEventListener('click', function() { calculate('add'); });
+        document.getElementById('subtract').addEventListener('click', function() { calculate('subtract'); });
+        document.getElementById('multiply').addEventListener('click', function() { calculate('multiply'); });
+        document.getElementById('divide').addEventListener('click', function() { calculate('divide'); });
+
+    </script>
+</body>
+</html>
