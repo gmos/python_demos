@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Calculator</title>
-    <link rel="stylesheet" type="text/css" href="/static/calc_styles.css">
-</head>
-<body>
-    <h1>Calculator</h1>
-    <input id="num1" type="number" placeholder="Enter first number">
-    <input id="num2" type="number" placeholder="Enter second number">
-    <button id="add">Add</button>
-    <button id="subtract">Subtract</button>
+<button id="subtract">Subtract</button>
     <button id="multiply">Multiply</button>
     <button id="divide">Divide</button>
     <div class="result-container">
@@ -17,24 +6,31 @@
     </div>
 
     <script>
+        // Define a function to perform arithmetic operations.
         function calculate(operation) {
+            // Retrieve the first number from the input field.
             var num1 = document.getElementById('num1').value;
+            // Retrieve the second number from the input field.
             var num2 = document.getElementById('num2').value;
 
+            // Check for division by zero to prevent errors.
             if (operation === 'divide' && num2 == 0) {
                 alert('Error: Division by zero is not allowed.');
                 return;
             }
 
+            // Send a POST request to the server with the operation and numbers.
             fetch('/' + operation, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                // Convert the numbers to JSON format for the request body.
                 body: JSON.stringify({ "num1": num1, "num2": num2 }),
             })
-            .then(response => response.json())
+            .then(response => response.json()) // Parse the JSON response.
             .then(data => {
+                // Check for errors in the response and display them, otherwise update the result.
                 if (data.error) {
                     alert('Error: ' + data.error);
                 } else {
@@ -42,15 +38,7 @@
                 }
             })
             .catch((error) => {
+                // Log any errors that occur during the fetch operation.
                 console.error('Error:', error);
             });
         }
-
-        document.getElementById('add').addEventListener('click', function() { calculate('add'); });
-        document.getElementById('subtract').addEventListener('click', function() { calculate('subtract'); });
-        document.getElementById('multiply').addEventListener('click', function() { calculate('multiply'); });
-        document.getElementById('divide').addEventListener('click', function() { calculate('divide'); });
-
-    </script>
-</body>
-</html>
