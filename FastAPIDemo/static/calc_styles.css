@@ -3,10 +3,11 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f0f0f0;
+    color: #35b680;
 }
 
 h1 {
-    color: #333;
+    color: #244135;
     text-align: center;
     padding: 20px 0;
 }
@@ -21,14 +22,14 @@ input, button, .result-container {
 }
 
 button {
-    background-color: #007BFF;
-    color: white;
+    background-color: #00ffb7;
+    color: rgb(210, 39, 39);
     border: none;
     cursor: pointer;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #00b35f;
 }
 
 .e {

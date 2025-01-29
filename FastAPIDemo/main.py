@@ -7,7 +7,7 @@ from pydantic import BaseModel
 app = FastAPI()
 
 # We keep static files in the directory declared below.
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")          
 
 # We keep Jinja2Templates in the directory declared below.
 templates = Jinja2Templates(directory="templates")
@@ -17,7 +17,6 @@ class Numbers(BaseModel):
     """
     A model representing two numbers.
     """
-
     num1: float
     num2: float
 
@@ -26,8 +25,13 @@ class Result(BaseModel):
     """
     A model representing the result of an operation on two numbers.
     """
-
     result: float
+
+class RouvenResult(BaseModel):
+    """
+    A model representing the result of an operation on two numbers.
+    """
+    message: str
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -73,3 +77,12 @@ async def divide_numbers(numbers: Numbers) -> Result:
             result=float("inf")
         )  # Consider how you want to handle division by zero.
     return Result(result=numbers.num1 / numbers.num2)
+
+
+@app.post("/rouven", response_model=RouvenResult)
+async def rouven(numbers: Numbers) -> RouvenResult:
+    """
+    Return a custom message.
+    """
+    s = f"Hi rouven, no result from for you! {numbers.num1} and {numbers.num2}"
+    return RouvenResult(message=s)
